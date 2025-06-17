@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title><%= champion.name %> 상세 정보</title>
+  <link href="/static/create.css" rel="stylesheet">
+</head>
+<body>
+  <div class="detail-container">
+    <div class="champ-row">
+      <img class="champ-image" src="/static/uploads/<%= champion.image %>" alt="챔피언 이미지">
+      <div class="champ-info">
+        <h1><%= champion.name %> (<%= champion.alias %>)</h1>
+        <p><strong>포지션:</strong> <%= champion.position %></p>
+        <p><strong>역할군:</strong> <%= champion.role %></p>
+        <div class="champ-story">
+          <p><%= champion.story %></p>
+        </div>
+      </div>
+    </div>
+
+    <div class="skills">
+      <% champion.skills.forEach(skill => { %>
+        <div class="skill-box">
+          <img src="/static/uploads/<%= skill.image %>" alt="스킬 이미지">
+          <strong><%= skill.name %></strong>
+          <p><%= skill.desc %></p>
+        </div>
+      <% }) %>
+    </div>
+  </div>
+</body>
+</html>

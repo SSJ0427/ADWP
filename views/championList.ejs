@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>챔피언 도감</title>
+  <link href="/static/create.css" rel="stylesheet">
+</head>
+<body>
+  <div class="top-bar">
+    <h1>창작 챔피언 도감</h1>
+    <a href="/create"><button>챔피언 생성</button></a>
+  </div>
+  
+  <div class="gallery">
+    <% champions.forEach((champion, index) => { %>
+      <% if (champion.image) { %>
+      <div class="card">
+        <form action="/delete/<%= champion.id %>" method="POST" onsubmit="return confirm('정말 삭제할까요?')">
+          <button class="delete-button">삭제</button>
+        </form>
+        <a href="/champion/<%= champion.id %>">
+          <img src="/static/uploads/<%= champion.image %>" alt="<%= champion.name %>">
+          <p><%= champion.name %> (<%= champion.alias %>)</p>
+        </a>
+      </div>
+      <% } %>
+    <% }) %>
+  </div>
+</body>
+</html>
