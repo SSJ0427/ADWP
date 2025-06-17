@@ -111,16 +111,20 @@ button:hover {
 }
 
 .gallery {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    gap: 20px;
+    display: block;
+    column-count: auto;/
 }
 
 .card {
+    width: 200px;
+    margin-bottom: 20px;
+    display: inline-block;
+    vertical-align: top;
     border: 2px solid black;
     background-color: white;
     text-align: center;
     padding: 10px;
+    position: relative;
 }
 
 .card img {
@@ -195,6 +199,13 @@ button:hover {
     gap: 5px;
 }
   
+.skill-box img {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  border: 1px solid black;
+}
+
 .skill-box .image-box {
     width: 100px;
     height: 100px;
@@ -229,3 +240,21 @@ button:hover {
     align-items: center;
     margin-bottom: 20px;
 }  
+
+.back-button {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  padding: 10px 16px;
+  background-color: #f0f0f0;
+  border-radius: 6px;
+  text-decoration: none;
+  color: #333;
+  font-weight: bold;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: background-color 0.2s;
+}
+
+.back-button:hover {
+  background-color: #e0e0e0;
+}

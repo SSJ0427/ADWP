@@ -2,9 +2,9 @@ const express = require('express');
 const path = require('path');
 const multer = require('multer');
 const fs = require('fs');
-
 const app = express();
 const port = 3000;
+const dataPath = path.join(__dirname, 'data/championdata.json');
 
 // 업로드된 이미지 저장 설정
 const storage = multer.diskStorage({
@@ -29,6 +29,14 @@ app.set('views', path.join(__dirname, 'views'));
 
 // 임시 챔피언 데이터
 let champions = [];
+let nextId = 1;
+
+if (fs.existsSync(dataPath)) {
+  const jsonData = fs.readFileSync(dataPath);
+  champions = JSON.parse(jsonData);
+  const maxId = champions.reduce((max, c) => Math.max(max, c.id), 0);
+  nextId = maxId + 1;
+}
 
 // 루트 페이지 - 챔피언 도감
 app.get('/', (req, res) => {
@@ -44,7 +52,7 @@ app.post('/delete/:id', (req, res) => {
 
 // 챔피언 생성 페이지
 app.get('/create', (req, res) => {
-  res.sendFile(path.join(__dirname, 'static/championCreate.html'));
+  res.render('championCreate');
 });
 
 // 챔피언 생성 처리
@@ -59,7 +67,7 @@ app.post('/create', upload.fields([
   const files = req.files;
 
   const newChampion = {
-    id: Date.now(),
+    id: nextId++,
     name: body.name,
     alias: body.alias,
     position: body.position,
@@ -73,8 +81,10 @@ app.post('/create', upload.fields([
     }))
   };
 
-  champions.push(newChampion);
-  res.redirect(`/champion/${newChampion.id}`);
+champions.push(newChampion);
+fs.writeFileSync(dataPath, JSON.stringify(champions, null, 2));
+res.redirect(`/champion/${newChampion.id}`);
+
 });
 
 // 챔피언 상세 페이지

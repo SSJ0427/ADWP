@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>챔피언 생성</title>
+  <link rel="stylesheet" href="/static/create.css">
+</head>
+<body>
+  <form class="container" action="/create" method="POST" enctype="multipart/form-data">
+    <div class="row">
+      <div class="image-box-wrapper">
+        <div class="image-box" onclick="document.getElementById('championImg').click()" id="championImageBox">
+          챔피언 이미지
+        </div>
+        <input type="file" name="championImg" id="championImg" style="display: none" accept="image/*" onchange="previewImage(event, 'championImageBox')">
+      </div>
+      <div class="form-group-wrapper">
+        <div class="form-group">
+          <label>챔피언 이름</label>
+          <input type="text" name="name" required>
+        </div>
+        <div class="form-group">
+          <label>챔피언 이명</label>
+          <input type="text" name="alias" required>
+        </div>
+        <div class="form-group">
+          <label>포지션</label>
+          <input type="text" name="position">
+        </div>
+        <div class="form-group">
+          <label>역할군</label>
+          <input type="text" name="role">
+        </div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label>배경 이야기</label>
+      <textarea name="story" required></textarea>
+    </div>
+
+    <div class="skill-section">
+      <% ['q', 'w', 'e', 'r'].forEach(skill => { %>
+        <div class="skill-box">
+          <div class="image-box" onclick="document.getElementById(`skill<%= skill %>Img`).click()" id="skill<%= skill %>ImageBox">
+            <%= skill.toUpperCase() %> 스킬 이미지
+          </div>
+          <input type="file" name="skill<%= skill %>Img" id="skill<%= skill %>Img" style="display: none" accept="image/*" onchange="previewImage(event, 'skill<%= skill %>ImageBox')">
+          <input type="text" name="skill<%= skill %>Name" placeholder="<%= skill.toUpperCase() %> 스킬 이름">
+          <textarea name="skill<%= skill %>Desc" placeholder="<%= skill.toUpperCase() %> 스킬 설명"></textarea>
+        </div>
+      <% }) %>
+    </div>
+
+    <div class="form-group" style="text-align: right; margin-top: 20px;">
+      <button type="submit">챔피언 등록</button>
+    </div>
+  </form>
+
+  <script>
+    function previewImage(event, boxId) {
+      const box = document.getElementById(boxId);
+      const file = event.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = () => {
+          box.style.backgroundImage = `url(${reader.result})`;
+          box.textContent = "";
+        };
+        reader.readAsDataURL(file);
+      }
+    }
+  </script>
+</body>
+</html>

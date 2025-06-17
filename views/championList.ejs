@@ -4,14 +4,15 @@
   <meta charset="UTF-8">
   <title>챔피언 도감</title>
   <link href="/static/create.css" rel="stylesheet">
+  <script src="https://unpkg.com/masonry-layout@4/dist/masonry.pkgd.min.js"></script>
 </head>
 <body>
   <div class="top-bar">
     <h1>창작 챔피언 도감</h1>
     <a href="/create"><button>챔피언 생성</button></a>
   </div>
-  
-  <div class="gallery">
+
+  <div class="gallery" data-masonry='{"itemSelector": ".card", "columnWidth": ".card", "percentPosition": true}'>
     <% champions.forEach((champion, index) => { %>
       <% if (champion.image) { %>
       <div class="card">
@@ -26,5 +27,15 @@
       <% } %>
     <% }) %>
   </div>
+
+  <script>
+    window.onload = function () {
+      new Masonry('.gallery', {
+        itemSelector: '.card',
+        columnWidth: '.card',
+        percentPosition: true
+      });
+    };
+  </script>
 </body>
 </html>
