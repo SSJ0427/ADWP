@@ -2,74 +2,63 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
-  <title>챔피언 생성</title>
-  <link rel="stylesheet" href="/static/create.css">
+  <title><%= champion ? '챔피언 수정' : '챔피언 생성' %></title>
+  <link href="/static/create.css" rel="stylesheet">
 </head>
 <body>
-  <form class="container" action="/create" method="POST" enctype="multipart/form-data">
+  <form class="container" action="<%= champion ? `/edit/${champion.id}` : '/create' %>" method="POST" enctype="multipart/form-data">
     <div class="row">
       <div class="image-box-wrapper">
-        <div class="image-box" onclick="document.getElementById('championImg').click()" id="championImageBox">
-          챔피언 이미지
+        <div class="image-box" id="championImageBox" onclick="document.getElementById('championImg').click()">
+          <% if (champion?.image) { %>
+            <img src="/static/uploads/<%= champion.image %>" style="width:100%; height:100%; object-fit:cover;">
+          <% } else { %>이미지 추가<% } %>
         </div>
-        <input type="file" name="championImg" id="championImg" style="display: none" accept="image/*" onchange="previewImage(event, 'championImageBox')">
+        <input type="file" name="championImg" id="championImg" style="display: none">
       </div>
+
       <div class="form-group-wrapper">
         <div class="form-group">
-          <label>챔피언 이름</label>
-          <input type="text" name="name" required>
+          <label>이름</label>
+          <input type="text" name="name" value="<%= champion?.name || '' %>" required>
         </div>
         <div class="form-group">
-          <label>챔피언 이명</label>
-          <input type="text" name="alias" required>
+          <label>별명</label>
+          <input type="text" name="alias" value="<%= champion?.alias || '' %>" required>
         </div>
         <div class="form-group">
           <label>포지션</label>
-          <input type="text" name="position">
+          <input type="text" name="position" value="<%= champion?.position || '' %>" required>
         </div>
         <div class="form-group">
           <label>역할군</label>
-          <input type="text" name="role">
+          <input type="text" name="role" value="<%= champion?.role || '' %>" required>
+        </div>
+        <div class="form-group" style="grid-column: 1 / span 2">
+          <label>스토리</label>
+          <textarea name="story"><%= champion?.story || '' %></textarea>
         </div>
       </div>
     </div>
 
-    <div class="form-group">
-      <label>배경 이야기</label>
-      <textarea name="story" required></textarea>
-    </div>
-
     <div class="skill-section">
-      <% ['q', 'w', 'e', 'r'].forEach(skill => { %>
+      <% ['q', 'w', 'e', 'r'].forEach((key, i) => { %>
         <div class="skill-box">
-          <div class="image-box" onclick="document.getElementById(`skill<%= skill %>Img`).click()" id="skill<%= skill %>ImageBox">
-            <%= skill.toUpperCase() %> 스킬 이미지
+          <div class="image-box" id="skill<%= key %>ImageBox" onclick="document.getElementById('skill<%= key %>Img').click()">
+            <% if (champion?.skills?.[i]?.image) { %>
+              <img src="/static/uploads/<%= champion.skills[i].image %>" style="width:100%; height:100%; object-fit:cover;">
+            <% } else { %>스킬 <%= key.toUpperCase() %><% } %>
           </div>
-          <input type="file" name="skill<%= skill %>Img" id="skill<%= skill %>Img" style="display: none" accept="image/*" onchange="previewImage(event, 'skill<%= skill %>ImageBox')">
-          <input type="text" name="skill<%= skill %>Name" placeholder="<%= skill.toUpperCase() %> 스킬 이름">
-          <textarea name="skill<%= skill %>Desc" placeholder="<%= skill.toUpperCase() %> 스킬 설명"></textarea>
+          <input type="file" name="skill<%= key %>Img" id="skill<%= key %>Img" style="display: none">
+          <input type="text" name="skill<%= key %>Name" placeholder="스킬명" value="<%= champion?.skills?.[i]?.name || '' %>">
+          <textarea name="skill<%= key %>Desc" placeholder="스킬 설명"><%= champion?.skills?.[i]?.desc || '' %></textarea>
         </div>
       <% }) %>
     </div>
 
-    <div class="form-group" style="text-align: right; margin-top: 20px;">
-      <button type="submit">챔피언 등록</button>
+    <div class="form-footer">
+      <button type="submit"><%= champion ? '수정 완료' : '생성' %></button>
     </div>
   </form>
-
-  <script>
-    function previewImage(event, boxId) {
-      const box = document.getElementById(boxId);
-      const file = event.target.files[0];
-      if (file) {
-        const reader = new FileReader();
-        reader.onload = () => {
-          box.style.backgroundImage = `url(${reader.result})`;
-          box.textContent = "";
-        };
-        reader.readAsDataURL(file);
-      }
-    }
-  </script>
 </body>
 </html>

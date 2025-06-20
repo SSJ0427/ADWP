@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title><%= champ.name %> - 상세 정보</title>
+  <link rel="stylesheet" href="/static/create.css">
+</head>
+<body>
+  <div class="top-bar">
+    <h1><%= champ.name %> (<%= champ.title %>)</h1>
+    <a href="/"><button>목록으로</button></a>
+  </div>
+
+  <div style="display: flex; gap: 20px;">
+    <img src="https://ddragon.leagueoflegends.com/cdn/14.11.1/img/champion/<%= champ.image.full %>" alt="<%= champ.name %>" style="max-width: 300px; border-radius: 12px;">
+
+    <div>
+      <h2>기본 정보</h2>
+      <p><strong>이름:</strong> <%= champ.name %></p>
+      <p><strong>이명:</strong> <%= champ.title %></p>
+      <p><strong>포지션:</strong> <%= champ.tags.join(', ') %></p>
+      <p><strong>설명:</strong> <%= champ.blurb %></p>
+
+      <h3>능력치</h3>
+      <ul>
+        <% for (let key in champ.info) { %>
+          <li><%= key %>: <%= champ.info[key] %></li>
+        <% } %>
+      </ul>
+    </div>
+  </div>
+</body>
+</html>

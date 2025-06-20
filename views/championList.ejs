@@ -12,21 +12,44 @@
     <a href="/create"><button>챔피언 생성</button></a>
   </div>
 
-  <div class="gallery" data-masonry='{"itemSelector": ".card", "columnWidth": ".card", "percentPosition": true}'>
-    <% champions.forEach((champion, index) => { %>
-      <% if (champion.image) { %>
-      <div class="card">
-        <form action="/delete/<%= champion.id %>" method="POST" onsubmit="return confirm('정말 삭제할까요?')">
-          <button class="delete-button">삭제</button>
-        </form>
-        <a href="/champion/<%= champion.id %>">
-          <img src="/static/uploads/<%= champion.image %>" alt="<%= champion.name %>">
-          <p><%= champion.name %> (<%= champion.alias %>)</p>
-        </a>
-      </div>
-      <% } %>
-    <% }) %>
-  </div>
+  <form method="GET" action="/" style="margin-bottom: 20px;">
+  <input type="text" name="search" placeholder="챔피언 검색..." value="<%= searchKeyword %>">
+  <select name="sort">
+    <option value="id" <%= sortOption === 'id' ? 'selected' : '' %>>ID 순</option>
+    <option value="name" <%= sortOption === 'name' ? 'selected' : '' %>>이름 순</option>
+  </select>
+  <button type="submit">검색</button>
+  </form>
+
+<div class="gallery" data-masonry='{"itemSelector": ".card", "columnWidth": ".card", "percentPosition": true}'>
+  <% champions.forEach((champion, index) => { %>
+    <% if (champion.image) { %>
+    <div class="card">
+      <form action="/delete/<%= champion.id %>" method="POST" onsubmit="return confirm('정말 삭제할까요?')">
+        <button class="delete-button">삭제</button>
+      </form>
+      <a href="/champion/<%= champion.id %>">
+        <img src="/static/uploads/<%= champion.image %>" alt="<%= champion.name %>">
+        <p><%= champion.name %> (<%= champion.alias %>)</p>
+      </a>
+    </div>
+    <% } %>
+  <% }) %>
+</div>
+
+<hr style="margin: 40px 0; border: 1px solid #ccc;">
+
+<h2>공식 챔피언 목록</h2>
+<div class="gallery">
+  <% riotChampions.forEach(champ => { %>
+    <div class="card">
+      <a href="/riot/<%= champ.id %>">
+        <img src="https://ddragon.leagueoflegends.com/cdn/14.11.1/img/champion/<%= champ.image.full %>" alt="<%= champ.name %>">
+        <p><%= champ.name %> (<%= champ.title %>)</p>
+      </a>
+    </div>
+  <% }) %>
+</div>
 
   <script>
     window.onload = function () {
